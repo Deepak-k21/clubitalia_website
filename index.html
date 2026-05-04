@@ -1,0 +1,2082 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Club Italia — Il Rispetto È Il Vero Lusso</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Montserrat:wght@200;300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --gold: #C9A84C;
+    --gold-light: #E8C96A;
+    --gold-dim: #8A6F30;
+    --silver: #A8A8A8;
+    --silver-light: #D4D4D4;
+    --champagne: #F0E6C8;
+    --black: #050505;
+    --black-2: #0D0D0D;
+    --black-3: #141414;
+    --white: #F5F0E8;
+    --white-dim: rgba(245,240,232,0.6);
+    --glow-gold: 0 0 40px rgba(201,168,76,0.4), 0 0 80px rgba(201,168,76,0.15);
+    --glow-silver: 0 0 40px rgba(168,168,168,0.3), 0 0 80px rgba(168,168,168,0.1);
+  }
+
+  *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--black);
+    color: var(--white);
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 300;
+    overflow-x: hidden;
+    cursor: none;
+  }
+
+  /* ─── CUSTOM CURSOR ─── */
+  .cursor {
+    position: fixed;
+    width: 12px; height: 12px;
+    background: var(--gold);
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 99999;
+    transform: translate(-50%,-50%);
+    transition: width 0.3s, height 0.3s, background 0.3s;
+    mix-blend-mode: normal;
+  }
+  .cursor-ring {
+    position: fixed;
+    width: 36px; height: 36px;
+    border: 1px solid rgba(201,168,76,0.5);
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 99998;
+    transform: translate(-50%,-50%);
+    transition: all 0.15s ease-out;
+  }
+  body:hover .cursor { opacity:1; }
+
+  /* ─── GRAIN OVERLAY ─── */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 100;
+    opacity: 0.4;
+  }
+
+  /* ─── NAV ─── */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 1000;
+    padding: 24px 60px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: linear-gradient(to bottom, rgba(5,5,5,0.95), transparent);
+  }
+  .nav-logo {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 20px;
+    font-weight: 600;
+    letter-spacing: 0.3em;
+    color: var(--gold);
+    text-transform: uppercase;
+    text-decoration: none;
+  }
+  .nav-logo span {
+    color: var(--white);
+    font-weight: 300;
+  }
+  .nav-links {
+    display: flex;
+    gap: 40px;
+    list-style: none;
+  }
+  .nav-links a {
+    color: rgba(245,240,232,0.6);
+    text-decoration: none;
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    transition: color 0.3s;
+  }
+  .nav-links a:hover { color: var(--gold); }
+  .nav-cta {
+    padding: 10px 28px;
+    border: 1px solid var(--gold);
+    color: var(--gold);
+    text-decoration: none;
+    font-size: 10px;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    transition: all 0.4s;
+    position: relative;
+    overflow: hidden;
+  }
+  .nav-cta::before {
+    content:'';
+    position:absolute;
+    inset:0;
+    background: var(--gold);
+    transform: translateX(-100%);
+    transition: transform 0.4s ease;
+    z-index: -1;
+  }
+  .nav-cta:hover { color: var(--black); }
+  .nav-cta:hover::before { transform: translateX(0); }
+
+  /* ─── HERO ─── */
+  .hero {
+    position: relative;
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+  }
+  #heroCanvas {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+  .hero-overlay {
+    position: absolute;
+    inset: 0;
+    background: 
+      linear-gradient(to bottom, rgba(5,5,5,0.3) 0%, transparent 30%, transparent 60%, rgba(5,5,5,0.85) 100%),
+      linear-gradient(to right, rgba(5,5,5,0.2), transparent, rgba(5,5,5,0.2));
+  }
+  .hero-content {
+    position: absolute;
+    bottom: 12vh;
+    left: 60px;
+    right: 60px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+  }
+  .hero-left { max-width: 600px; }
+  .hero-eyebrow {
+    font-size: 10px;
+    letter-spacing: 0.5em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 20px;
+    opacity: 0;
+    animation: fadeUp 1s 0.5s forwards;
+  }
+  .hero-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(56px, 7vw, 96px);
+    font-weight: 300;
+    line-height: 0.95;
+    letter-spacing: 0.02em;
+    opacity: 0;
+    animation: fadeUp 1.2s 0.8s forwards;
+  }
+  .hero-title em {
+    font-style: italic;
+    color: var(--gold);
+  }
+  .hero-tagline {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 14px;
+    letter-spacing: 0.35em;
+    text-transform: uppercase;
+    color: var(--white-dim);
+    margin-top: 28px;
+    font-style: italic;
+    opacity: 0;
+    animation: fadeUp 1s 1.2s forwards;
+  }
+  .hero-right {
+    text-align: right;
+    opacity: 0;
+    animation: fadeUp 1s 1.4s forwards;
+  }
+  .hero-scroll-hint {
+    font-size: 9px;
+    letter-spacing: 0.4em;
+    text-transform: uppercase;
+    color: rgba(245,240,232,0.4);
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+  .scroll-line {
+    width: 60px;
+    height: 1px;
+    background: linear-gradient(to right, transparent, var(--gold));
+    animation: scrollPulse 2s ease-in-out infinite;
+  }
+  @keyframes scrollPulse {
+    0%,100% { opacity:0.4; width:40px; }
+    50% { opacity:1; width:80px; }
+  }
+
+  /* ─── MARQUEE ─── */
+  .marquee-wrap {
+    overflow: hidden;
+    background: var(--gold);
+    padding: 14px 0;
+    position: relative;
+    z-index: 2;
+  }
+  .marquee-track {
+    display: flex;
+    white-space: nowrap;
+    animation: marquee 25s linear infinite;
+  }
+  .marquee-track span {
+    font-size: 10px;
+    letter-spacing: 0.4em;
+    text-transform: uppercase;
+    color: var(--black);
+    padding: 0 40px;
+    font-weight: 500;
+  }
+  .marquee-dot {
+    color: rgba(0,0,0,0.4) !important;
+    letter-spacing: 0 !important;
+    padding: 0 10px !important;
+    font-size: 16px !important;
+  }
+  @keyframes marquee {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
+  }
+
+  /* ─── SCROLL SEQUENCE SECTION ─── */
+  .scroll-sequence {
+    position: relative;
+    height: 800vh;
+  }
+  .scroll-sticky {
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+  #scrollCanvas {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .scroll-text-overlay {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    pointer-events: none;
+  }
+  .scroll-text-left {
+    padding-left: 8vw;
+    max-width: 380px;
+  }
+  .scroll-label {
+    font-size: 9px;
+    letter-spacing: 0.5em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 16px;
+    opacity: 0;
+    transition: opacity 0.6s, transform 0.6s;
+    transform: translateY(20px);
+  }
+  .scroll-label.visible { opacity:1; transform:translateY(0); }
+  .scroll-heading {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(36px, 4vw, 58px);
+    font-weight: 300;
+    line-height: 1.1;
+    opacity: 0;
+    transition: opacity 0.8s 0.1s, transform 0.8s 0.1s;
+    transform: translateY(30px);
+  }
+  .scroll-heading.visible { opacity:1; transform:translateY(0); }
+  .scroll-body {
+    margin-top: 20px;
+    font-size: 12px;
+    line-height: 2;
+    color: var(--white-dim);
+    letter-spacing: 0.05em;
+    opacity: 0;
+    transition: opacity 0.8s 0.2s, transform 0.8s 0.2s;
+    transform: translateY(20px);
+  }
+  .scroll-body.visible { opacity:1; transform:translateY(0); }
+  .scroll-progress-bar {
+    position: absolute;
+    bottom: 40px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 9px;
+    letter-spacing: 0.3em;
+    color: rgba(245,240,232,0.4);
+  }
+  .progress-track {
+    width: 120px;
+    height: 1px;
+    background: rgba(245,240,232,0.15);
+    position: relative;
+  }
+  .progress-fill {
+    height: 100%;
+    background: var(--gold);
+    width: 0%;
+    transition: width 0.1s;
+  }
+
+  /* ─── SECTION BASE ─── */
+  section { position: relative; }
+  .section-intro {
+    padding: 120px 60px 60px;
+    text-align: center;
+  }
+  .section-eyebrow {
+    font-size: 10px;
+    letter-spacing: 0.5em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 24px;
+  }
+  .section-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(40px, 5vw, 72px);
+    font-weight: 300;
+    line-height: 1.05;
+  }
+  .section-title em { font-style: italic; color: var(--gold); }
+  .section-divider {
+    width: 60px;
+    height: 1px;
+    background: var(--gold);
+    margin: 32px auto;
+    position: relative;
+  }
+  .section-divider::before, .section-divider::after {
+    content: '';
+    position: absolute;
+    top: -3px;
+    width: 6px; height: 6px;
+    border: 1px solid var(--gold);
+    transform: rotate(45deg);
+  }
+  .section-divider::before { left: -10px; }
+  .section-divider::after { right: -10px; }
+
+  /* ─── CARDS SECTION ─── */
+  .cards-section {
+    padding: 80px 40px 140px;
+    background: var(--black);
+    position: relative;
+  }
+  .cards-section::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 1px;
+    background: linear-gradient(to right, transparent, var(--gold-dim), transparent);
+  }
+  .cards-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 32px;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  /* ─── CARD FLIP ─── */
+  .card-flip-container {
+    perspective: 1200px;
+    height: 620px;
+    cursor: pointer;
+    opacity: 0;
+    transform: translateY(50px);
+    transition: opacity 0.8s, transform 0.8s;
+  }
+  .card-flip-container.revealed { opacity:1; transform:translateY(0); }
+  .card-flip-container:nth-child(2) { transition-delay: 0.15s; }
+  .card-flip-container:nth-child(3) { transition-delay: 0.3s; }
+
+  .card-flipper {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    transform-style: preserve-3d;
+    transition: transform 0.9s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  .card-flip-container:hover .card-flipper { transform: rotateY(180deg); }
+
+  .card-face {
+    position: absolute;
+    inset: 0;
+    border-radius: 24px;
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+  }
+  .card-front { transform: rotateY(0deg); }
+  .card-back { transform: rotateY(180deg); }
+
+  /* ── CARD BACKGROUND IMAGES ── */
+  .card-bg-img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 24px;
+    z-index: 0;
+    pointer-events: none;
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+  }
+  .card-inner-front { position: relative; z-index: 1; }
+  .card-inner-back { position: relative; z-index: 1; }
+
+  /* Noir card - light bg so darken overlay */
+  .card-black .card-front { background: none !important; }
+  .card-black .card-front .card-bg-img { filter: brightness(0.25); }
+
+  /* Argento card - silver bg */
+  .card-silver .card-front { background: none !important; }
+  .card-silver .card-front .card-bg-img { filter: brightness(0.35) saturate(0.5); }
+
+  /* Oro card - dark bg with golden feel */
+  .card-gold .card-front { background: none !important; }
+  .card-gold .card-front .card-bg-img { filter: brightness(0.4) saturate(1.2); border-radius: 24px; }
+
+  /* ── BLACK CARD ── */
+  .card-black .card-front {
+    background: linear-gradient(145deg, #1A1A1A 0%, #0A0A0A 50%, #111 100%);
+    border: 1px solid rgba(201,168,76,0.3);
+    box-shadow: var(--glow-gold), inset 0 1px 0 rgba(201,168,76,0.15);
+  }
+  .card-black .card-back {
+    background: linear-gradient(145deg, #111 0%, #0A0A0A 100%);
+    border: 1px solid rgba(201,168,76,0.3);
+    box-shadow: var(--glow-gold);
+  }
+
+  /* ── SILVER CARD ── */
+  .card-silver .card-front {
+    background: linear-gradient(145deg, #3A3A3A 0%, #1C1C1C 30%, #2A2A2A 60%, #181818 100%);
+    border: 1px solid rgba(168,168,168,0.4);
+    box-shadow: var(--glow-silver), inset 0 1px 0 rgba(255,255,255,0.1);
+    position: relative;
+    overflow: hidden;
+  }
+  .card-silver .card-front::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: repeating-linear-gradient(
+      90deg,
+      transparent,
+      transparent 2px,
+      rgba(255,255,255,0.015) 2px,
+      rgba(255,255,255,0.015) 4px
+    );
+  }
+  .card-silver .card-back {
+    background: linear-gradient(145deg, #252525 0%, #181818 100%);
+    border: 1px solid rgba(168,168,168,0.4);
+    box-shadow: var(--glow-silver);
+  }
+
+  /* ── GOLD CARD ── */
+  .card-gold .card-front {
+    background: linear-gradient(145deg, #2A2218 0%, #1A1508 30%, #252015 60%, #1E1A0A 100%);
+    border: 1px solid rgba(201,168,76,0.5);
+    box-shadow: 0 0 60px rgba(201,168,76,0.5), 0 0 120px rgba(201,168,76,0.2), inset 0 1px 0 rgba(201,168,76,0.3);
+  }
+  .card-gold .card-back {
+    background: linear-gradient(145deg, #1E1508 0%, #14100A 100%);
+    border: 1px solid rgba(201,168,76,0.5);
+    box-shadow: 0 0 60px rgba(201,168,76,0.5), 0 0 120px rgba(201,168,76,0.2);
+  }
+
+  /* ── FEATURED BADGE ── */
+  .card-badge {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    padding: 4px 12px;
+    font-size: 8px;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    border-radius: 20px;
+  }
+  .card-black .card-badge { background: rgba(201,168,76,0.15); color: var(--gold); border: 1px solid rgba(201,168,76,0.3); }
+  .card-silver .card-badge { background: rgba(168,168,168,0.15); color: var(--silver-light); border: 1px solid rgba(168,168,168,0.3); }
+  .card-gold .card-badge {
+    background: rgba(201,168,76,0.25);
+    color: var(--gold-light);
+    border: 1px solid rgba(201,168,76,0.5);
+    animation: badgePulse 2s ease-in-out infinite;
+  }
+  @keyframes badgePulse {
+    0%,100% { box-shadow: none; }
+    50% { box-shadow: 0 0 15px rgba(201,168,76,0.4); }
+  }
+
+  /* ── CARD INNER CONTENT ── */
+  .card-inner-front {
+    padding: 36px 32px;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+  }
+  .card-type-label {
+    font-size: 9px;
+    letter-spacing: 0.5em;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+  .card-black .card-type-label { color: var(--gold); }
+  .card-silver .card-type-label { color: var(--silver-light); }
+  .card-gold .card-type-label { color: var(--gold-light); }
+
+  .card-name {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 32px;
+    font-weight: 300;
+    line-height: 1.1;
+    margin-bottom: 4px;
+  }
+  .card-black .card-name { color: var(--white); }
+  .card-silver .card-name { color: var(--silver-light); }
+  .card-gold .card-name { color: var(--champagne); }
+
+  .card-tagline-small {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 12px;
+    font-style: italic;
+    letter-spacing: 0.1em;
+    margin-bottom: 32px;
+  }
+  .card-black .card-tagline-small { color: rgba(245,240,232,0.4); }
+  .card-silver .card-tagline-small { color: rgba(212,212,212,0.5); }
+  .card-gold .card-tagline-small { color: rgba(201,168,76,0.6); }
+
+  .card-visual-area {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+  }
+  .card-crest {
+    font-size: 64px;
+    opacity: 0.15;
+    position: absolute;
+  }
+  .card-price-display {
+    text-align: center;
+    position: relative;
+    z-index: 1;
+  }
+  .card-price-from {
+    font-size: 9px;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: rgba(245,240,232,0.4);
+    margin-bottom: 4px;
+  }
+  .card-price-amount {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 56px;
+    font-weight: 300;
+    line-height: 1;
+    letter-spacing: -0.02em;
+  }
+  .card-black .card-price-amount { color: var(--gold); }
+  .card-silver .card-price-amount { color: var(--silver-light); }
+  .card-gold .card-price-amount { color: var(--gold-light); }
+  .card-price-period {
+    font-size: 11px;
+    color: rgba(245,240,232,0.4);
+    letter-spacing: 0.2em;
+    margin-top: 4px;
+  }
+
+  .card-divider {
+    height: 1px;
+    margin: 24px 0;
+  }
+  .card-black .card-divider { background: linear-gradient(to right, transparent, rgba(201,168,76,0.3), transparent); }
+  .card-silver .card-divider { background: linear-gradient(to right, transparent, rgba(168,168,168,0.3), transparent); }
+  .card-gold .card-divider { background: linear-gradient(to right, transparent, rgba(201,168,76,0.5), transparent); }
+
+  .card-features-preview {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .feature-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 11px;
+    color: rgba(245,240,232,0.6);
+    letter-spacing: 0.05em;
+  }
+  .feature-dot {
+    width: 4px; height: 4px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+  .card-black .feature-dot { background: var(--gold); }
+  .card-silver .feature-dot { background: var(--silver); }
+  .card-gold .feature-dot { background: var(--gold-light); }
+
+  .card-hover-hint {
+    text-align: center;
+    margin-top: 20px;
+    font-size: 9px;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+  }
+  .card-black .card-hover-hint { color: rgba(201,168,76,0.5); }
+  .card-silver .card-hover-hint { color: rgba(168,168,168,0.5); }
+  .card-gold .card-hover-hint { color: rgba(201,168,76,0.6); }
+
+  /* ── CARD BACK ── */
+  .card-inner-back {
+    padding: 36px 32px;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    transform-style: preserve-3d;
+  }
+  .card-back-header {
+    font-size: 9px;
+    letter-spacing: 0.5em;
+    text-transform: uppercase;
+    margin-bottom: 28px;
+  }
+  .card-black .card-back-header { color: var(--gold); }
+  .card-silver .card-back-header { color: var(--silver-light); }
+  .card-gold .card-back-header { color: var(--gold-light); }
+
+  .benefits-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    flex: 1;
+  }
+  .benefit-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    font-size: 12px;
+    line-height: 1.6;
+    color: rgba(245,240,232,0.75);
+    letter-spacing: 0.03em;
+  }
+  .benefit-icon {
+    font-size: 14px;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+
+  .cta-btn {
+    display: block;
+    text-align: center;
+    padding: 16px;
+    margin-top: 28px;
+    text-decoration: none;
+    font-size: 10px;
+    letter-spacing: 0.35em;
+    text-transform: uppercase;
+    font-weight: 500;
+    border-radius: 6px;
+    transition: all 0.4s;
+    position: relative;
+    overflow: hidden;
+    z-index: 10;
+    cursor: pointer;
+    width: 100%;
+    border: none;
+    font-family: inherit;
+    transform: translateZ(40px);
+    pointer-events: auto;
+  }
+  .cta-btn::before {
+    content:'';
+    position:absolute;
+    inset:0;
+    opacity:0;
+    transition:opacity 0.3s;
+  }
+  .cta-btn:hover::before { opacity:1; }
+  .cta-black {
+    background: var(--gold);
+    color: var(--black);
+  }
+  .cta-black:hover { background: var(--gold-light); box-shadow: 0 0 30px rgba(201,168,76,0.4); transform: translateZ(45px); }
+  .cta-silver {
+    background: transparent;
+    color: var(--silver-light);
+    border: 1px solid var(--silver);
+  }
+  .cta-silver:hover { background: rgba(168,168,168,0.1); box-shadow: 0 0 20px rgba(168,168,168,0.2); transform: translateZ(45px); }
+  .cta-gold {
+    background: linear-gradient(135deg, var(--gold) 0%, var(--gold-light) 50%, var(--gold) 100%);
+    background-size: 200% 100%;
+    color: var(--black);
+    animation: goldShimmer 3s ease-in-out infinite;
+  }
+  @keyframes goldShimmer {
+    0% { background-position: 100% 0; }
+    50% { background-position: 0% 0; }
+    100% { background-position: 100% 0; }
+  }
+  .cta-gold:hover { box-shadow: 0 0 40px rgba(201,168,76,0.6); transform: translateZ(45px) translateY(-2px); }
+
+  /* ─── COMPARISON TABLE ─── */
+  .compare-section {
+    padding: 100px 60px;
+    background: var(--black-2);
+    position: relative;
+  }
+  .compare-section::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 1px;
+    background: linear-gradient(to right, transparent, var(--gold-dim), transparent);
+  }
+  .compare-table {
+    max-width: 1000px;
+    margin: 60px auto 0;
+    overflow: hidden;
+  }
+  .compare-row {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 1fr;
+    gap: 0;
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+    transition: background 0.2s;
+  }
+  .compare-row:hover { background: rgba(255,255,255,0.02); }
+  .compare-row.header-row {
+    background: transparent;
+    border-bottom: 1px solid rgba(201,168,76,0.2);
+    margin-bottom: 8px;
+  }
+  .compare-cell {
+    padding: 18px 20px;
+    font-size: 12px;
+    color: rgba(245,240,232,0.6);
+    letter-spacing: 0.04em;
+  }
+  .compare-cell.feature-name { color: var(--white-dim); }
+  .compare-cell.header {
+    font-size: 9px;
+    letter-spacing: 0.4em;
+    text-transform: uppercase;
+    text-align: center;
+  }
+  .header-black { color: var(--gold); }
+  .header-silver { color: var(--silver-light); }
+  .header-gold { color: var(--gold-light); }
+  .compare-cell.check { text-align: center; font-size: 14px; }
+  .check-yes { color: var(--gold); }
+  .check-no { color: rgba(255,255,255,0.15); }
+  .check-premium { color: var(--gold-light); font-weight: bold; }
+
+  /* ─── FEATURES BAR ─── */
+  .features-bar {
+    padding: 100px 60px;
+    background: var(--black);
+  }
+  .features-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 40px;
+    max-width: 1200px;
+    margin: 60px auto 0;
+  }
+  .feature-card {
+    padding: 40px 28px;
+    border: 1px solid rgba(255,255,255,0.05);
+    border-radius: 12px;
+    background: rgba(255,255,255,0.01);
+    transition: all 0.4s;
+    opacity: 0;
+    transform: translateY(30px);
+    transition: all 0.6s;
+  }
+  .feature-card.revealed { opacity:1; transform:translateY(0); }
+  .feature-card:nth-child(2) { transition-delay:0.1s; }
+  .feature-card:nth-child(3) { transition-delay:0.2s; }
+  .feature-card:nth-child(4) { transition-delay:0.3s; }
+  .feature-card:hover {
+    border-color: rgba(201,168,76,0.2);
+    background: rgba(201,168,76,0.03);
+    transform: translateY(-6px);
+    box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+  }
+  .feature-icon-wrap {
+    width: 48px; height: 48px;
+    border: 1px solid rgba(201,168,76,0.2);
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    margin-bottom: 24px;
+  }
+  .feature-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 22px;
+    font-weight: 400;
+    margin-bottom: 12px;
+    color: var(--white);
+  }
+  .feature-desc {
+    font-size: 11px;
+    line-height: 1.9;
+    color: rgba(245,240,232,0.45);
+    letter-spacing: 0.04em;
+  }
+
+  /* ─── APP SECTION ─── */
+  .app-section {
+    padding: 120px 60px;
+    background: var(--black-2);
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+    align-items: center;
+    position: relative;
+  }
+  .app-section::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 1px;
+    background: linear-gradient(to right, transparent, var(--gold-dim), transparent);
+  }
+  .app-text .section-eyebrow { text-align: left; }
+  .app-text .section-title { text-align: left; font-size: clamp(32px, 3.5vw, 52px); }
+  .app-desc {
+    margin-top: 24px;
+    font-size: 13px;
+    line-height: 2.2;
+    color: rgba(245,240,232,0.5);
+    letter-spacing: 0.04em;
+    max-width: 480px;
+  }
+  .app-badges {
+    display: flex;
+    gap: 16px;
+    margin-top: 40px;
+    flex-wrap: wrap;
+  }
+  .app-badge {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 20px;
+    border: 1px solid rgba(201,168,76,0.2);
+    border-radius: 8px;
+    text-decoration: none;
+    color: var(--white);
+    transition: all 0.3s;
+    font-size: 11px;
+    letter-spacing: 0.08em;
+  }
+  .app-badge:hover { border-color: var(--gold); background: rgba(201,168,76,0.05); }
+  .app-badge-icon { font-size: 22px; }
+  .app-badge-text { display: flex; flex-direction: column; }
+  .app-badge-sub { font-size: 8px; color: rgba(245,240,232,0.4); letter-spacing: 0.2em; text-transform: uppercase; }
+  .app-badge-name { font-size: 13px; font-weight: 500; }
+
+  .app-mockup {
+    display: flex;
+    justify-content: center;
+    position: relative;
+  }
+  .mockup-phones {
+    display: flex;
+    gap: -20px;
+    align-items: center;
+    position: relative;
+  }
+  .phone-frame {
+    width: 220px;
+    height: 440px;
+    background: var(--black-3);
+    border-radius: 36px;
+    border: 1px solid rgba(201,168,76,0.15);
+    box-shadow: 0 40px 100px rgba(0,0,0,0.8), 0 0 0 1px rgba(255,255,255,0.03);
+    padding: 16px;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+  }
+  .phone-frame.secondary {
+    transform: scale(0.88) translateX(40px) translateY(30px) rotateY(-8deg);
+    opacity: 0.6;
+    z-index: 0;
+  }
+  .phone-frame.primary { z-index: 1; }
+  .phone-notch {
+    width: 60px; height: 8px;
+    background: var(--black);
+    border-radius: 4px;
+    margin: 0 auto 16px;
+  }
+  .phone-screen {
+    flex: 1;
+    background: linear-gradient(145deg, #1A1A1A, #0D0D0D);
+    border-radius: 24px;
+    padding: 16px;
+    overflow: hidden;
+  }
+  .phone-app-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+  }
+  .phone-logo-text {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 14px;
+    color: var(--gold);
+  }
+  .phone-avatar {
+    width: 24px; height: 24px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--gold-dim), var(--gold));
+    opacity: 0.7;
+  }
+  .phone-card-mini {
+    width: 100%;
+    height: 90px;
+    border-radius: 12px;
+    background: linear-gradient(145deg, #1A1A1A, #111);
+    border: 1px solid rgba(201,168,76,0.2);
+    margin-bottom: 12px;
+    padding: 12px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+  .phone-card-mini .logo-sm {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 10px;
+    color: var(--gold);
+    font-style: italic;
+  }
+  .phone-card-mini .level-sm {
+    font-size: 7px;
+    letter-spacing: 0.3em;
+    color: rgba(201,168,76,0.5);
+    text-transform: uppercase;
+  }
+  .phone-items {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .phone-item {
+    height: 36px;
+    border-radius: 8px;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.04);
+  }
+  .mockup-glow {
+    position: absolute;
+    width: 300px; height: 300px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(201,168,76,0.1) 0%, transparent 70%);
+    bottom: -100px; right: 0;
+    pointer-events: none;
+  }
+
+  /* ─── TESTIMONIALS ─── */
+  .testimonials {
+    padding: 100px 60px;
+    background: var(--black);
+    overflow: hidden;
+  }
+  .testimonials-track {
+    display: flex;
+    gap: 32px;
+    margin-top: 60px;
+    animation: testimonialsScroll 40s linear infinite;
+    width: max-content;
+  }
+  .testimonials-track:hover { animation-play-state: paused; }
+  @keyframes testimonialsScroll {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
+  }
+  .testimonial-card {
+    width: 360px;
+    flex-shrink: 0;
+    padding: 36px 32px;
+    border: 1px solid rgba(255,255,255,0.05);
+    border-radius: 16px;
+    background: rgba(255,255,255,0.01);
+  }
+  .testimonial-stars {
+    color: var(--gold);
+    font-size: 12px;
+    letter-spacing: 4px;
+    margin-bottom: 20px;
+  }
+  .testimonial-text {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 18px;
+    font-style: italic;
+    line-height: 1.7;
+    color: rgba(245,240,232,0.8);
+    margin-bottom: 24px;
+  }
+  .testimonial-author {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .author-avatar {
+    width: 36px; height: 36px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--gold-dim) 0%, var(--gold) 100%);
+    opacity: 0.6;
+  }
+  .author-name { font-size: 11px; letter-spacing: 0.1em; color: var(--white-dim); }
+  .author-tier { font-size: 9px; letter-spacing: 0.3em; text-transform: uppercase; color: var(--gold); margin-top: 2px; }
+
+  /* ─── FINAL CTA ─── */
+  .final-cta {
+    padding: 160px 60px;
+    text-align: center;
+    background: var(--black-2);
+    position: relative;
+    overflow: hidden;
+  }
+  .final-cta::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 1px;
+    background: linear-gradient(to right, transparent, var(--gold-dim), transparent);
+  }
+  .final-bg-glow {
+    position: absolute;
+    width: 600px; height: 600px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(201,168,76,0.06) 0%, transparent 70%);
+    top: 50%; left: 50%;
+    transform: translate(-50%,-50%);
+    pointer-events: none;
+  }
+  .final-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(48px, 6vw, 88px);
+    font-weight: 300;
+    line-height: 1.05;
+    position: relative;
+  }
+  .final-title em { font-style: italic; color: var(--gold); }
+  .final-sub {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 16px;
+    font-style: italic;
+    color: rgba(245,240,232,0.4);
+    letter-spacing: 0.3em;
+    margin: 24px 0 50px;
+    position: relative;
+  }
+  .final-btn {
+    display: inline-block;
+    padding: 18px 60px;
+    background: var(--gold);
+    color: var(--black);
+    text-decoration: none;
+    font-size: 11px;
+    letter-spacing: 0.35em;
+    text-transform: uppercase;
+    font-weight: 500;
+    transition: all 0.4s;
+    position: relative;
+  }
+  .final-btn:hover { background: var(--gold-light); box-shadow: 0 0 60px rgba(201,168,76,0.4); transform: translateY(-3px); }
+
+  /* ─── FOOTER ─── */
+  footer {
+    padding: 60px;
+    border-top: 1px solid rgba(255,255,255,0.04);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: var(--black);
+  }
+  .footer-logo {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--gold);
+    letter-spacing: 0.3em;
+  }
+  .footer-copy {
+    font-size: 10px;
+    color: rgba(245,240,232,0.25);
+    letter-spacing: 0.2em;
+  }
+  .footer-links {
+    display: flex;
+    gap: 32px;
+    list-style: none;
+  }
+  .footer-links a {
+    font-size: 10px;
+    color: rgba(245,240,232,0.3);
+    text-decoration: none;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    transition: color 0.3s;
+  }
+  .footer-links a:hover { color: var(--gold); }
+
+  /* ─── ANIMATIONS ─── */
+  @keyframes fadeUp {
+    from { opacity:0; transform:translateY(30px); }
+    to { opacity:1; transform:translateY(0); }
+  }
+
+  /* ─── PAYMENT MODAL ─── */
+  .payment-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.85);
+    z-index: 10000;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    opacity: 0;
+    transition: opacity 0.4s ease;
+  }
+  .payment-overlay.active {
+    display: flex;
+    opacity: 1;
+  }
+  .payment-modal {
+    background: linear-gradient(145deg, #1A1A1A 0%, #0D0D0D 60%, #141414 100%);
+    border: 1px solid rgba(201,168,76,0.3);
+    border-radius: 24px;
+    padding: 48px 40px;
+    max-width: 480px;
+    width: 90%;
+    text-align: center;
+    position: relative;
+    box-shadow: 0 0 80px rgba(201,168,76,0.15), 0 40px 100px rgba(0,0,0,0.8);
+    transform: translateY(30px) scale(0.95);
+    transition: transform 0.5s cubic-bezier(0.16,1,0.3,1);
+    max-height: 85vh;
+    overflow-y: auto;
+  }
+  .payment-modal::-webkit-scrollbar {
+    width: 6px;
+  }
+  .payment-modal::-webkit-scrollbar-thumb {
+    background: rgba(201,168,76,0.3);
+    border-radius: 4px;
+  }
+  .payment-overlay.active .payment-modal {
+    transform: translateY(0) scale(1);
+  }
+  .payment-close {
+    position: absolute;
+    top: 16px;
+    right: 20px;
+    background: none;
+    border: none;
+    color: rgba(245,240,232,0.5);
+    font-size: 24px;
+    cursor: pointer;
+    transition: color 0.3s, transform 0.3s;
+    z-index: 2;
+  }
+  .payment-close:hover {
+    color: var(--gold);
+    transform: rotate(90deg);
+  }
+  .payment-tier-label {
+    font-size: 9px;
+    letter-spacing: 0.5em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 8px;
+  }
+  .payment-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 32px;
+    font-weight: 300;
+    color: var(--white);
+    margin-bottom: 8px;
+  }
+  .payment-price {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 42px;
+    font-weight: 300;
+    color: var(--gold);
+    margin-bottom: 4px;
+  }
+  .payment-period {
+    font-size: 11px;
+    color: rgba(245,240,232,0.4);
+    letter-spacing: 0.2em;
+    margin-bottom: 28px;
+  }
+  .payment-divider {
+    height: 1px;
+    background: linear-gradient(to right, transparent, rgba(201,168,76,0.3), transparent);
+    margin: 0 0 28px;
+  }
+  .payment-methods-title {
+    font-size: 9px;
+    letter-spacing: 0.4em;
+    text-transform: uppercase;
+    color: rgba(245,240,232,0.5);
+    margin-bottom: 20px;
+  }
+  .payment-qr-wrap {
+    background: rgba(255,255,255,0.95);
+    border-radius: 16px;
+    padding: 20px;
+    display: inline-block;
+    margin-bottom: 20px;
+    box-shadow: 0 0 30px rgba(201,168,76,0.1);
+  }
+  .payment-qr-wrap img {
+    width: 200px;
+    height: 200px;
+    border-radius: 8px;
+    display: block;
+  }
+  .payment-upi-id {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    padding: 14px 20px;
+    border: 1px solid rgba(201,168,76,0.2);
+    border-radius: 10px;
+    margin-bottom: 16px;
+    background: rgba(201,168,76,0.03);
+    cursor: pointer;
+    transition: all 0.3s;
+  }
+  .payment-upi-id:hover {
+    border-color: var(--gold);
+    background: rgba(201,168,76,0.08);
+  }
+  .payment-upi-label {
+    font-size: 9px;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: rgba(245,240,232,0.4);
+  }
+  .payment-upi-value {
+    font-size: 14px;
+    color: var(--gold);
+    letter-spacing: 0.05em;
+    font-weight: 400;
+  }
+  .payment-upi-copy {
+    font-size: 10px;
+    color: rgba(245,240,232,0.3);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    padding: 4px 12px;
+    border: 1px solid rgba(245,240,232,0.1);
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.3s;
+    background: transparent;
+  }
+  .payment-upi-copy:hover {
+    border-color: var(--gold);
+    color: var(--gold);
+  }
+  .payment-phone {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    padding: 14px 20px;
+    border: 1px solid rgba(201,168,76,0.15);
+    border-radius: 10px;
+    margin-bottom: 24px;
+    background: rgba(201,168,76,0.02);
+  }
+  .payment-phone-icon {
+    font-size: 18px;
+  }
+  .payment-phone-label {
+    font-size: 9px;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: rgba(245,240,232,0.4);
+  }
+  .payment-phone-number {
+    font-size: 16px;
+    color: var(--white);
+    letter-spacing: 0.1em;
+    font-weight: 400;
+    font-family: 'Montserrat', sans-serif;
+  }
+  .payment-note {
+    font-size: 10px;
+    color: rgba(245,240,232,0.3);
+    letter-spacing: 0.08em;
+    line-height: 1.8;
+    font-style: italic;
+    margin-bottom: 24px;
+  }
+  .payment-back-btn {
+    display: inline-block;
+    padding: 12px 32px;
+    background: transparent;
+    border: 1px solid rgba(245,240,232,0.2);
+    color: rgba(245,240,232,0.6);
+    border-radius: 8px;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.3s;
+  }
+  .payment-back-btn:hover {
+    background: rgba(245,240,232,0.05);
+    color: var(--white);
+    border-color: rgba(245,240,232,0.4);
+  }
+  .payment-or {
+    font-size: 10px;
+    color: rgba(245,240,232,0.25);
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    margin: 16px 0;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+  .payment-or::before, .payment-or::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: rgba(245,240,232,0.08);
+  }
+  .copied-toast {
+    position: fixed;
+    bottom: 40px;
+    left: 50%;
+    transform: translateX(-50%) translateY(20px);
+    background: var(--gold);
+    color: var(--black);
+    padding: 10px 28px;
+    border-radius: 8px;
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    font-weight: 500;
+    opacity: 0;
+    transition: all 0.4s;
+    z-index: 10001;
+    pointer-events: none;
+  }
+  .copied-toast.show {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+
+  /* ─── RESPONSIVE ─── */
+  @media (max-width: 1024px) {
+    nav { padding: 20px 30px; }
+    .nav-links { display: none; }
+    .hero-content { left: 30px; right: 30px; bottom: 10vh; }
+    .cards-grid { grid-template-columns: 1fr; max-width: 420px; margin: 0 auto; }
+    .features-grid { grid-template-columns: repeat(2, 1fr); }
+    .app-section { grid-template-columns: 1fr; }
+    .compare-section { padding: 60px 20px; }
+    .section-intro { padding: 80px 30px 40px; }
+    .payment-modal { padding: 32px 24px; }
+    .payment-qr-wrap img { width: 160px; height: 160px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- CURSOR -->
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+
+<!-- NAV -->
+<nav>
+  <a href="#" class="nav-logo">Club <span>Italia</span></a>
+  <ul class="nav-links">
+    <li><a href="#cards">Membership</a></li>
+    <li><a href="#compare">Benefits</a></li>
+    <li><a href="#app">The App</a></li>
+    <li><a href="#about">About</a></li>
+  </ul>
+  <a href="#cards" class="nav-cta">Acquire Your Card</a>
+</nav>
+
+<!-- HERO -->
+<section class="hero" id="hero">
+  <canvas id="heroCanvas"></canvas>
+  <div class="hero-overlay"></div>
+  <div class="hero-content">
+    <div class="hero-left">
+      <p class="hero-eyebrow">Exclusive Membership · Est. 2024</p>
+      <h1 class="hero-title">Club<br><em>Italia</em></h1>
+      <p class="hero-tagline">Il Rispetto È Il Vero Lusso</p>
+    </div>
+    <div class="hero-right">
+      <div class="hero-scroll-hint">
+        <span>Scroll to Discover</span>
+        <div class="scroll-line"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MARQUEE -->
+<div class="marquee-wrap">
+  <div class="marquee-track" id="marqueeTrack">
+    <!-- JS doubles content -->
+  </div>
+</div>
+
+<!-- SCROLL SEQUENCE -->
+<div class="scroll-sequence" id="scrollSequence">
+  <div class="scroll-sticky">
+    <canvas id="scrollCanvas"></canvas>
+    <div class="scroll-text-overlay">
+      <div class="scroll-text-left">
+        <p class="scroll-label" id="scrollLabel">Crafted for the Select Few</p>
+        <h2 class="scroll-heading" id="scrollHeading">Your Card.<br>Your Identity.</h2>
+        <p class="scroll-body" id="scrollBody">Three tiers of membership. One world of privilege. Each Club Italia card is a physical symbol of your status — precision-engineered and unlocking access to an exclusive universe.</p>
+      </div>
+    </div>
+    <div class="scroll-progress-bar">
+      <span>Explore</span>
+      <div class="progress-track">
+        <div class="progress-fill" id="progressFill"></div>
+      </div>
+      <span id="progressNum">00 / 48</span>
+    </div>
+  </div>
+</div>
+
+<!-- CARDS SECTION -->
+<section class="cards-section" id="cards">
+  <div class="section-intro">
+    <p class="section-eyebrow">Choose Your Tier</p>
+    <h2 class="section-title">Three Cards.<br><em>One Legacy.</em></h2>
+    <div class="section-divider"></div>
+    <p style="font-size:12px; color:rgba(245,240,232,0.4); letter-spacing:0.08em; max-width:480px; margin:0 auto; line-height:2.2;">
+      Each membership tier grants access to ShopDeals' exclusive network of premium brands, wellness centers, and lifestyle experiences. Hover any card to reveal full benefits.
+    </p>
+  </div>
+
+  <div class="cards-grid">
+
+    <!-- BLACK CARD -->
+    <div class="card-flip-container card-black" id="cardBlack">
+      <div class="card-flipper">
+        <div class="card-face card-front">
+          <img src="assets/card1.png" alt="Noir Card" class="card-bg-img">
+          <div class="card-inner-front">
+            <span class="card-badge">Entry Tier</span>
+            <p class="card-type-label">Membership · Level I</p>
+            <h3 class="card-name">Noir</h3>
+            <p class="card-tagline-small">Il primo passo verso il lusso</p>
+            <div class="card-visual-area">
+              <span class="card-crest">♞</span>
+              <div class="card-price-display">
+                <p class="card-price-from">Annual Access</p>
+                <p class="card-price-amount">₹299</p>
+                <p class="card-price-period">per year</p>
+              </div>
+            </div>
+            <div class="card-divider"></div>
+            <div class="card-features-preview">
+              <div class="feature-row"><div class="feature-dot"></div><span>Exclusive store discounts up to 20%</span></div>
+              <div class="feature-row"><div class="feature-dot"></div><span>Access to 50+ partner brands</span></div>
+              <div class="feature-row"><div class="feature-dot"></div><span>ShopDeals app — full access</span></div>
+            </div>
+            <p class="card-hover-hint">Hover to reveal all benefits →</p>
+          </div>
+        </div>
+        <div class="card-face card-back">
+          <div class="card-inner-back">
+            <p class="card-back-header">Noir — Full Benefits</p>
+            <ul class="benefits-list">
+              <li class="benefit-item"><span class="benefit-icon">🏪</span><span>Access to 50+ premium partner stores & brands</span></li>
+              <li class="benefit-item"><span class="benefit-icon">💳</span><span>Up to 20% discount across Fashion, Electronics & Wellness</span></li>
+              <li class="benefit-item"><span class="benefit-icon">📱</span><span>Full ShopDeals app access — browsing, cart & favorites</span></li>
+              <li class="benefit-item"><span class="benefit-icon">🔔</span><span>Early access notifications for new drops & sales</span></li>
+              <li class="benefit-item"><span class="benefit-icon">🎁</span><span>Monthly curated deal packages delivered to app</span></li>
+              <li class="benefit-item"><span class="benefit-icon">🌐</span><span>Vendor discovery & direct brand messaging</span></li>
+            </ul>
+            <button type="button" class="cta-btn cta-black" onclick="openPayment('Noir','₹299','per year')">Acquire Noir Card</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SILVER CARD -->
+    <div class="card-flip-container card-silver" id="cardSilver">
+      <div class="card-flipper">
+        <div class="card-face card-front">
+          <img src="assets/card2.png" alt="Argento Card" class="card-bg-img">
+          <div class="card-inner-front">
+            <span class="card-badge">Popular</span>
+            <p class="card-type-label">Membership · Level II</p>
+            <h3 class="card-name">Argento</h3>
+            <p class="card-tagline-small">Dove il privilegio incontra il lusso</p>
+            <div class="card-visual-area">
+              <span class="card-crest">♞</span>
+              <div class="card-price-display">
+                <p class="card-price-from">Annual Access</p>
+                <p class="card-price-amount">₹499</p>
+                <p class="card-price-period">per year</p>
+              </div>
+            </div>
+            <div class="card-divider"></div>
+            <div class="card-features-preview">
+              <div class="feature-row"><div class="feature-dot"></div><span>All Noir benefits included</span></div>
+              <div class="feature-row"><div class="feature-dot"></div><span>Exclusive deals up to 40% off</span></div>
+              <div class="feature-row"><div class="feature-dot"></div><span>Priority vendor support & booking</span></div>
+            </div>
+            <p class="card-hover-hint">Hover to reveal all benefits →</p>
+          </div>
+        </div>
+        <div class="card-face card-back">
+          <div class="card-inner-back">
+            <p class="card-back-header">Argento — Full Benefits</p>
+            <ul class="benefits-list">
+              <li class="benefit-item"><span class="benefit-icon">✦</span><span>Everything in Noir, elevated</span></li>
+              <li class="benefit-item"><span class="benefit-icon">💎</span><span>Discounts up to 40% across all categories</span></li>
+              <li class="benefit-item"><span class="benefit-icon">🌙</span><span>Nightlife & wellness center exclusive access</span></li>
+              <li class="benefit-item"><span class="benefit-icon">📅</span><span>Priority reservations at partner restaurants & spas</span></li>
+              <li class="benefit-item"><span class="benefit-icon">🎯</span><span>Personalized deal curation based on preferences</span></li>
+              <li class="benefit-item"><span class="benefit-icon">🤝</span><span>Dedicated account manager via in-app chat</span></li>
+            </ul>
+            <button type="button" class="cta-btn cta-silver" onclick="openPayment('Argento','₹499','per year')">Acquire Argento Card</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- GOLD CARD -->
+    <div class="card-flip-container card-gold" id="cardGold">
+      <div class="card-flipper">
+        <div class="card-face card-front">
+          <img src="assets/card3.png" alt="Oro Card" class="card-bg-img">
+          <div class="card-inner-front">
+            <span class="card-badge">Prestige</span>
+            <p class="card-type-label">Membership · Level III</p>
+            <h3 class="card-name">Oro</h3>
+            <p class="card-tagline-small">Il vertice dell'esclusività</p>
+            <div class="card-visual-area">
+              <span class="card-crest">♞</span>
+              <div class="card-price-display">
+                <p class="card-price-from">Annual Access</p>
+                <p class="card-price-amount">₹599</p>
+                <p class="card-price-period">per year</p>
+              </div>
+            </div>
+            <div class="card-divider"></div>
+            <div class="card-features-preview">
+              <div class="feature-row"><div class="feature-dot"></div><span>Unlimited access to all tiers</span></div>
+              <div class="feature-row"><div class="feature-dot"></div><span>VIP invitations to private events</span></div>
+              <div class="feature-row"><div class="feature-dot"></div><span>Concierge-level personal service</span></div>
+            </div>
+            <p class="card-hover-hint">Hover to reveal all benefits →</p>
+          </div>
+        </div>
+        <div class="card-face card-back">
+          <div class="card-inner-back">
+            <p class="card-back-header">Oro — Full Benefits</p>
+            <ul class="benefits-list">
+              <li class="benefit-item"><span class="benefit-icon">👑</span><span>All Argento benefits, plus unlimited privileges</span></li>
+              <li class="benefit-item"><span class="benefit-icon">🎖️</span><span>VIP invitations to exclusive brand launch events</span></li>
+              <li class="benefit-item"><span class="benefit-icon">🏆</span><span>Complimentary premium product gifting program</span></li>
+              <li class="benefit-item"><span class="benefit-icon">✈️</span><span>Partner hotel & travel deals up to 60% off</span></li>
+              <li class="benefit-item"><span class="benefit-icon">⚡</span><span>Instant checkout & first-access to limited drops</span></li>
+              <li class="benefit-item"><span class="benefit-icon">🔱</span><span>White-glove concierge — 24/7 personal assistance</span></li>
+            </ul>
+            <button type="button" class="cta-btn cta-gold" onclick="openPayment('Oro','₹599','per year')">Acquire Oro Card</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- COMPARE -->
+<section class="compare-section" id="compare">
+  <div class="section-intro" style="padding-top:0">
+    <p class="section-eyebrow">Side by Side</p>
+    <h2 class="section-title">Tier <em>Comparison</em></h2>
+    <div class="section-divider"></div>
+  </div>
+  <div class="compare-table">
+    <div class="compare-row header-row">
+      <div class="compare-cell feature-name">Benefit</div>
+      <div class="compare-cell header header-black">Noir</div>
+      <div class="compare-cell header header-silver">Argento</div>
+      <div class="compare-cell header header-gold">Oro</div>
+    </div>
+    <div class="compare-row"><div class="compare-cell feature-name">Partner brand access</div><div class="compare-cell check"><span class="check-yes">✓</span></div><div class="compare-cell check"><span class="check-yes">✓</span></div><div class="compare-cell check"><span class="check-yes">✓</span></div></div>
+    <div class="compare-row"><div class="compare-cell feature-name">Maximum discount</div><div class="compare-cell check" style="font-size:11px;text-align:center;color:var(--gold)">20%</div><div class="compare-cell check" style="font-size:11px;text-align:center;color:var(--silver-light)">40%</div><div class="compare-cell check" style="font-size:11px;text-align:center;color:var(--gold-light)">60%</div></div>
+    <div class="compare-row"><div class="compare-cell feature-name">ShopDeals app full access</div><div class="compare-cell check"><span class="check-yes">✓</span></div><div class="compare-cell check"><span class="check-yes">✓</span></div><div class="compare-cell check"><span class="check-yes">✓</span></div></div>
+    <div class="compare-row"><div class="compare-cell feature-name">Nightlife & wellness access</div><div class="compare-cell check"><span class="check-no">—</span></div><div class="compare-cell check"><span class="check-yes">✓</span></div><div class="compare-cell check"><span class="check-yes">✓</span></div></div>
+    <div class="compare-row"><div class="compare-cell feature-name">Priority reservations</div><div class="compare-cell check"><span class="check-no">—</span></div><div class="compare-cell check"><span class="check-yes">✓</span></div><div class="compare-cell check"><span class="check-yes">✓</span></div></div>
+    <div class="compare-row"><div class="compare-cell feature-name">Dedicated account manager</div><div class="compare-cell check"><span class="check-no">—</span></div><div class="compare-cell check"><span class="check-yes">✓</span></div><div class="compare-cell check"><span class="check-yes">✓</span></div></div>
+    <div class="compare-row"><div class="compare-cell feature-name">VIP event invitations</div><div class="compare-cell check"><span class="check-no">—</span></div><div class="compare-cell check"><span class="check-no">—</span></div><div class="compare-cell check"><span class="check-premium">✦</span></div></div>
+    <div class="compare-row"><div class="compare-cell feature-name">Travel & hotel deals</div><div class="compare-cell check"><span class="check-no">—</span></div><div class="compare-cell check"><span class="check-no">—</span></div><div class="compare-cell check"><span class="check-premium">✦</span></div></div>
+    <div class="compare-row"><div class="compare-cell feature-name">Concierge 24/7</div><div class="compare-cell check"><span class="check-no">—</span></div><div class="compare-cell check"><span class="check-no">—</span></div><div class="compare-cell check"><span class="check-premium">✦</span></div></div>
+    <div class="compare-row"><div class="compare-cell feature-name">Gifting & limited drops</div><div class="compare-cell check"><span class="check-no">—</span></div><div class="compare-cell check"><span class="check-no">—</span></div><div class="compare-cell check"><span class="check-premium">✦</span></div></div>
+  </div>
+</section>
+
+<!-- FEATURES -->
+<section class="features-bar">
+  <div class="section-intro" style="padding-top:0">
+    <p class="section-eyebrow">The Ecosystem</p>
+    <h2 class="section-title">More Than <em>Shopping</em></h2>
+    <div class="section-divider"></div>
+  </div>
+  <div class="features-grid">
+    <div class="feature-card" id="f1">
+      <div class="feature-icon-wrap">🏬</div>
+      <h3 class="feature-title">Curated Discovery</h3>
+      <p class="feature-desc">Explore handpicked premium brands, flagship stores, and lifestyle venues selected for quality and exclusivity. No generic — only the finest.</p>
+    </div>
+    <div class="feature-card" id="f2">
+      <div class="feature-icon-wrap">💳</div>
+      <h3 class="feature-title">Card-Powered Access</h3>
+      <p class="feature-desc">Your physical Club Italia card is your key. Present it at partner locations for instant recognition, deals, and white-glove service.</p>
+    </div>
+    <div class="feature-card" id="f3">
+      <div class="feature-icon-wrap">🌐</div>
+      <h3 class="feature-title">Multi-Role Platform</h3>
+      <p class="feature-desc">A full ecosystem — shoppers, vendors, and admins each have tailored dashboards. Seamless management powered by real-time Firebase sync.</p>
+    </div>
+    <div class="feature-card" id="f4">
+      <div class="feature-icon-wrap">✨</div>
+      <h3 class="feature-title">Glassmorphic Design</h3>
+      <p class="feature-desc">Built on Flutter with dark-mode Glassmorphism. Silky 3D card animations, staggered reveals, and micro-interactions that feel genuinely premium.</p>
+    </div>
+  </div>
+</section>
+
+<!-- APP SECTION -->
+<section class="app-section" id="app">
+  <div class="app-text">
+    <p class="section-eyebrow">ShopDeals App</p>
+    <h2 class="section-title">Your Membership<br>in <em>Your Pocket</em></h2>
+    <p class="app-desc">Download the ShopDeals app to manage your Club Italia card, browse exclusive deals, track your membership perks, and connect directly with premium brands — all from one beautifully designed application.</p>
+    <div class="app-badges">
+      <a href="#" class="app-badge">
+        <span class="app-badge-icon">📱</span>
+        <div class="app-badge-text">
+          <span class="app-badge-sub">Download on the</span>
+          <span class="app-badge-name">App Store</span>
+        </div>
+      </a>
+      <a href="#" class="app-badge">
+        <span class="app-badge-icon">🤖</span>
+        <div class="app-badge-text">
+          <span class="app-badge-sub">Get it on</span>
+          <span class="app-badge-name">Google Play</span>
+        </div>
+      </a>
+    </div>
+  </div>
+  <div class="app-mockup">
+    <div class="mockup-phones">
+      <div class="phone-frame secondary">
+        <div class="phone-notch"></div>
+        <div class="phone-screen">
+          <div class="phone-app-bar"><span class="phone-logo-text">Club Italia</span><div class="phone-avatar"></div></div>
+          <div class="phone-items">
+            <div class="phone-item" style="height:50px;background:linear-gradient(135deg,rgba(201,168,76,0.1),rgba(201,168,76,0.02));border-color:rgba(201,168,76,0.1)"></div>
+            <div class="phone-item"></div><div class="phone-item"></div><div class="phone-item"></div><div class="phone-item"></div>
+          </div>
+        </div>
+      </div>
+      <div class="phone-frame primary">
+        <div class="phone-notch"></div>
+        <div class="phone-screen">
+          <div class="phone-app-bar"><span class="phone-logo-text">ShopDeals</span><div class="phone-avatar"></div></div>
+          <div class="phone-card-mini">
+            <span class="logo-sm">Club Italia</span>
+            <span class="level-sm">Oro — Active</span>
+          </div>
+          <div class="phone-items">
+            <div class="phone-item" style="height:44px;background:rgba(201,168,76,0.06)"></div>
+            <div class="phone-item"></div><div class="phone-item"></div><div class="phone-item"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="mockup-glow"></div>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section class="testimonials">
+  <div class="section-intro" style="padding-top:0; text-align:center">
+    <p class="section-eyebrow">Members Speak</p>
+    <h2 class="section-title">The Club <em>Experience</em></h2>
+  </div>
+  <div class="testimonials-track" id="testimonialsTrack">
+    <!-- JS populates -->
+  </div>
+</section>
+
+<!-- FINAL CTA -->
+<section class="final-cta" id="contact">
+  <div class="final-bg-glow"></div>
+  <p class="section-eyebrow">Begin Your Journey</p>
+  <h2 class="final-title">Enter the World<br>of <em>Club Italia</em></h2>
+  <p class="final-sub">Il Rispetto È Il Vero Lusso — Respect is the true luxury.</p>
+  <a href="#cards" class="final-btn">Select Your Membership</a>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">CLUB ITALIA</div>
+  <p class="footer-copy">© 2024 ShopDeals · ITACLUB · All rights reserved</p>
+  <ul class="footer-links">
+    <li><a href="#">Privacy</a></li>
+    <li><a href="#">Terms</a></li>
+    <li><a href="#">Contact</a></li>
+  </ul>
+</footer>
+
+<!-- PAYMENT MODAL -->
+<div class="payment-overlay" id="paymentOverlay">
+  <div class="payment-modal">
+    <button class="payment-close" onclick="closePayment()">&times;</button>
+    <p class="payment-tier-label" id="paymentTierLabel">Membership</p>
+    <h3 class="payment-title" id="paymentCardName">Acquire Card</h3>
+    <p class="payment-price" id="paymentPrice">₹0</p>
+    <p class="payment-period" id="paymentPeriod">per year</p>
+    <div class="payment-divider"></div>
+    <p class="payment-methods-title">Pay via UPI</p>
+    <div class="payment-qr-wrap">
+      <img src="assets/qr_payment.png" alt="UPI QR Code">
+    </div>
+    <div class="payment-or">or</div>
+    <div class="payment-upi-id" onclick="copyUPI()">
+      <div>
+        <p class="payment-upi-label">UPI ID</p>
+        <p class="payment-upi-value">deepakkannika2@oksbi</p>
+      </div>
+      <button class="payment-upi-copy">Copy</button>
+    </div>
+    <div class="payment-phone">
+      <span class="payment-phone-icon">📱</span>
+      <div>
+        <p class="payment-phone-label">Contact / Mobile Payment</p>
+        <p class="payment-phone-number">8122766882</p>
+      </div>
+    </div>
+    <p class="payment-note">Scan QR code or use UPI ID to complete payment.<br>After payment, send screenshot to the number above for confirmation.</p>
+    <button class="payment-back-btn" onclick="closePayment()">Go Back</button>
+  </div>
+</div>
+<div class="copied-toast" id="copiedToast">UPI ID Copied!</div>
+
+<script>
+// ─── CURSOR ───
+const cursor = document.getElementById('cursor');
+const cursorRing = document.getElementById('cursorRing');
+let mx = 0, my = 0, rx = 0, ry = 0;
+document.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; });
+function animateCursor() {
+  cursor.style.left = mx + 'px';
+  cursor.style.top = my + 'px';
+  rx += (mx - rx) * 0.12;
+  ry += (my - ry) * 0.12;
+  cursorRing.style.left = rx + 'px';
+  cursorRing.style.top = ry + 'px';
+  requestAnimationFrame(animateCursor);
+}
+animateCursor();
+document.querySelectorAll('a, button, .card-flip-container').forEach(el => {
+  el.addEventListener('mouseenter', () => {
+    cursor.style.width = '20px'; cursor.style.height = '20px';
+    cursorRing.style.width = '60px'; cursorRing.style.height = '60px';
+    cursorRing.style.borderColor = 'rgba(201,168,76,0.8)';
+  });
+  el.addEventListener('mouseleave', () => {
+    cursor.style.width = '12px'; cursor.style.height = '12px';
+    cursorRing.style.width = '36px'; cursorRing.style.height = '36px';
+    cursorRing.style.borderColor = 'rgba(201,168,76,0.5)';
+  });
+});
+
+// ─── MARQUEE ───
+const items = ['Premium Memberships', '·', 'Exclusive Brands', '·', 'Curated Deals', '·', 'ShopDeals App', '·', 'Club Italia', '·', 'IL RISPETTO È IL VERO LUSSO', '·', 'Premium Memberships', '·', 'Exclusive Brands', '·', 'Curated Deals', '·', 'ShopDeals App', '·', 'Club Italia', '·', 'IL RISPETTO È IL VERO LUSSO', '·'];
+const track = document.getElementById('marqueeTrack');
+const text = items.map(t => `<span class="${t==='·'?'marquee-dot':''}">${t}</span>`).join('');
+track.innerHTML = text + text;
+
+// ─── HERO FRAMES ───
+(async function() {
+  const canvas = document.getElementById('heroCanvas');
+  const ctx = canvas.getContext('2d');
+  const FRAME_COUNT = 18;
+  const frames = [];
+
+  function resize() {
+    canvas.width = canvas.offsetWidth;
+    canvas.height = canvas.offsetHeight;
+  }
+  resize();
+  window.addEventListener('resize', resize);
+
+  async function loadImg(src) {
+    return new Promise((res, rej) => {
+      const img = new Image();
+      img.onload = () => res(img);
+      img.onerror = rej;
+      img.src = src;
+    });
+  }
+
+  for (let i = 1; i <= FRAME_COUNT; i++) {
+    const n = String(i).padStart(2,'0');
+    try {
+      const img = await loadImg(`assets/frames/frame_${n}.png`);
+      frames.push(img);
+    } catch(e) {}
+  }
+
+  let currentFrame = 0;
+  let lastTime = 0;
+  const FPS = 4;
+  const interval = 1000 / FPS;
+
+  function drawFrame(img) {
+    if (!img) return;
+    const cw = canvas.width, ch = canvas.height;
+    const iw = img.width, ih = img.height;
+    const scale = Math.max(cw/iw, ch/ih);
+    const nw = iw * scale, nh = ih * scale;
+    const ox = (cw - nw) / 2, oy = (ch - nh) / 2;
+    ctx.clearRect(0,0,cw,ch);
+    ctx.drawImage(img, ox, oy, nw, nh);
+  }
+
+  function tick(ts) {
+    requestAnimationFrame(tick);
+    if (frames.length === 0) return;
+    if (ts - lastTime >= interval) {
+      lastTime = ts;
+      drawFrame(frames[currentFrame]);
+      currentFrame = (currentFrame + 1) % frames.length;
+    }
+  }
+  requestAnimationFrame(tick);
+})();
+
+// ─── SCROLL CANVAS ───
+(async function() {
+  const canvas = document.getElementById('scrollCanvas');
+  const ctx = canvas.getContext('2d');
+  const FRAME_COUNT = 48;
+  const frames = [];
+  const seqEl = document.getElementById('scrollSequence');
+  const progressFill = document.getElementById('progressFill');
+  const progressNum = document.getElementById('progressNum');
+
+  function resize() {
+    canvas.width = canvas.offsetWidth;
+    canvas.height = canvas.offsetHeight;
+  }
+  resize();
+  window.addEventListener('resize', resize);
+
+  async function loadImg(src) {
+    return new Promise((res, rej) => {
+      const img = new Image();
+      img.onload = () => res(img);
+      img.onerror = rej;
+      img.src = src;
+    });
+  }
+
+  for (let i = 1; i <= FRAME_COUNT; i++) {
+    const n = String(i).padStart(2,'0');
+    try {
+      const img = await loadImg(`assets/scroll/scroll_${n}.png`);
+      frames.push(img);
+    } catch(e) {}
+  }
+
+  function drawFrame(img) {
+    if (!img) return;
+    const cw = canvas.width, ch = canvas.height;
+    const iw = img.width, ih = img.height;
+    const scale = Math.max(cw/iw, ch/ih);
+    const nw = iw * scale, nh = ih * scale;
+    const ox = (cw - nw) / 2, oy = (ch - nh) / 2;
+    ctx.clearRect(0,0,cw,ch);
+    ctx.drawImage(img, ox, oy, nw, nh);
+  }
+
+  let targetFrame = 0, currentFrame = 0;
+
+  // Intersection observer for text
+  const textEls = [
+    document.getElementById('scrollLabel'),
+    document.getElementById('scrollHeading'),
+    document.getElementById('scrollBody')
+  ];
+
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) textEls.forEach(el => el.classList.add('visible'));
+      else textEls.forEach(el => el.classList.remove('visible'));
+    });
+  }, { threshold: 0.3 });
+  observer.observe(seqEl);
+
+  window.addEventListener('scroll', () => {
+    if (frames.length === 0) return;
+    const rect = seqEl.getBoundingClientRect();
+    const totalScroll = seqEl.offsetHeight - window.innerHeight;
+    const scrolled = -rect.top;
+    const progress = Math.max(0, Math.min(1, scrolled / totalScroll));
+    targetFrame = Math.floor(progress * (frames.length - 1));
+    progressFill.style.width = (progress * 100) + '%';
+    progressNum.textContent = String(targetFrame + 1).padStart(2,'0') + ' / ' + String(frames.length).padStart(2,'0');
+  });
+
+  function lerp(a, b, t) { return a + (b - a) * t; }
+
+  function tick() {
+    requestAnimationFrame(tick);
+    if (frames.length === 0) return;
+    currentFrame = lerp(currentFrame, targetFrame, 0.08);
+    const idx = Math.round(currentFrame);
+    if (frames[idx]) drawFrame(frames[idx]);
+  }
+  tick();
+})();
+
+// ─── SCROLL REVEAL ───
+const revealObserver = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      e.target.classList.add('revealed');
+    }
+  });
+}, { threshold: 0.15 });
+
+document.querySelectorAll('.card-flip-container, .feature-card').forEach(el => {
+  revealObserver.observe(el);
+});
+
+// ─── TESTIMONIALS ───
+const testimonials = [
+  { text: "The Oro card changed how I experience shopping. Every visit to a partner store feels like a private appointment.", author: "Arjun M.", tier: "Oro Member" },
+  { text: "Worth every rupee. The app is beautiful and the deals are genuinely exclusive — not the usual discount noise.", author: "Priya S.", tier: "Argento Member" },
+  { text: "Club Italia isn't just a loyalty card. It's a statement. The physical card alone draws conversations.", author: "Rahul K.", tier: "Oro Member" },
+  { text: "Seamless from the first tap. Purchased my Argento membership online, received the card in 3 days.", author: "Nandini V.", tier: "Argento Member" },
+  { text: "The nightlife access alone is worth the membership. Elite clubs, priority entry, zero queues.", author: "Deva R.", tier: "Noir Member" },
+  { text: "As a vendor on the platform, the admin dashboard is powerful. My store visibility quadrupled in a month.", author: "Suresh P.", tier: "Partner Vendor" },
+];
+const t = document.getElementById('testimonialsTrack');
+const html = testimonials.map(item => `
+  <div class="testimonial-card">
+    <div class="testimonial-stars">★★★★★</div>
+    <p class="testimonial-text">"${item.text}"</p>
+    <div class="testimonial-author">
+      <div class="author-avatar"></div>
+      <div>
+        <p class="author-name">${item.author}</p>
+        <p class="author-tier">${item.tier}</p>
+      </div>
+    </div>
+  </div>
+`).join('');
+t.innerHTML = html + html;
+
+// ─── PAYMENT MODAL ───
+function openPayment(tier, price, period) {
+  document.getElementById('paymentTierLabel').textContent = tier + ' Membership';
+  document.getElementById('paymentCardName').textContent = 'Acquire ' + tier;
+  document.getElementById('paymentPrice').textContent = price;
+  document.getElementById('paymentPeriod').textContent = period;
+  const overlay = document.getElementById('paymentOverlay');
+  overlay.style.display = 'flex';
+  requestAnimationFrame(() => {
+    overlay.classList.add('active');
+  });
+  document.body.style.overflow = 'hidden';
+}
+function closePayment() {
+  const overlay = document.getElementById('paymentOverlay');
+  overlay.classList.remove('active');
+  setTimeout(() => {
+    overlay.style.display = 'none';
+  }, 400);
+  document.body.style.overflow = '';
+}
+// Close on overlay click (not modal itself)
+document.getElementById('paymentOverlay').addEventListener('click', function(e) {
+  if (e.target === this) closePayment();
+});
+// Close on Escape key
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Escape') closePayment();
+});
+function copyUPI() {
+  navigator.clipboard.writeText('deepakkannika2@oksbi').then(() => {
+    const toast = document.getElementById('copiedToast');
+    toast.classList.add('show');
+    setTimeout(() => toast.classList.remove('show'), 2000);
+  });
+}
+</script>
+</body>
+</html>
