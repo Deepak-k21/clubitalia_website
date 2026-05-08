@@ -1494,7 +1494,6 @@
       <div class="progress-track">
         <div class="progress-fill" id="progressFill"></div>
       </div>
-      <span id="progressNum">00 / 48</span>
     </div>
   </div>
 </div>
@@ -1816,7 +1815,7 @@
         <p class="payment-phone-number">+91 74492 29623</p>
       </div>
     </div>
-    <p class="payment-note">Scan QR code or use UPI ID to complete payment.<br>After payment, send screenshot to the number above for confirmation.</p>
+    <p class="payment-note">Scan QR code or use UPI ID to complete payment.<br>After payment, send a screenshot and mention your delivery address to the number above so you can directly get your card delivered to your home.</p>
     <button class="payment-back-btn" onclick="closePayment()">Go Back</button>
   </div>
 </div>
@@ -1924,7 +1923,6 @@ track.innerHTML = text + text;
   const frames = [];
   const seqEl = document.getElementById('scrollSequence');
   const progressFill = document.getElementById('progressFill');
-  const progressNum = document.getElementById('progressNum');
 
   function resize() {
     canvas.width = canvas.offsetWidth;
@@ -1986,7 +1984,6 @@ track.innerHTML = text + text;
     const progress = Math.max(0, Math.min(1, scrolled / totalScroll));
     targetFrame = Math.floor(progress * (frames.length - 1));
     progressFill.style.width = (progress * 100) + '%';
-    progressNum.textContent = String(targetFrame + 1).padStart(2,'0') + ' / ' + String(frames.length).padStart(2,'0');
   });
 
   function lerp(a, b, t) { return a + (b - a) * t; }
